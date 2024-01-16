@@ -2,6 +2,7 @@ package com.floppy.SpringbootRestfulwebservicesdemo.service.Impl;
 
 import com.floppy.SpringbootRestfulwebservicesdemo.dto.Userdto;
 import com.floppy.SpringbootRestfulwebservicesdemo.entity.User;
+import com.floppy.SpringbootRestfulwebservicesdemo.mapper.AutoUserMapper;
 import com.floppy.SpringbootRestfulwebservicesdemo.mapper.UserMapper;
 import com.floppy.SpringbootRestfulwebservicesdemo.repository.UserRepo;
 import com.floppy.SpringbootRestfulwebservicesdemo.service.UserService;
@@ -25,29 +26,32 @@ public class UserServiceImpl implements UserService {
     {
         //Convert UserDto into User
 
-//        User user1 = new User(
+//  1)      User user1 = new User(
 //                user.getId(),
 //                user.getFirstname(),
 //                user.getLastname(),
 //                user.getEmail()
 //        );
 
-//        User user1 = UserMapper.UserdtotoUser(user);
+//    2)    User user1 = UserMapper.UserdtotoUser(user);
 
-        User user1 = modelMapper.map(user, User.class);
+//    3)   User user1 = modelMapper.map(user, User.class);
+
+        User user1 = AutoUserMapper.MAPPER.mapTouser(user); //4th method
        User saved_user = userRepo.save(user1);
        //Again Convert back to userDTO to return
        //Convert User to UserDTO
 
-//        Userdto user2 = new Userdto(
+//    1)    Userdto user2 = new Userdto(
 //                saved_user.getId(),
 //                saved_user.getFirstname(),
 //                saved_user.getLastname(),
 //                saved_user.getEmail()
 //        );
-//        Userdto userdto = UserMapper.UsertoUserdto(saved_user);
+//    2)    Userdto userdto = UserMapper.UsertoUserdto(saved_user);
 
-        Userdto userdto = modelMapper.map(saved_user, Userdto.class);
+//    3)    Userdto userdto = modelMapper.map(saved_user, Userdto.class);
+        Userdto userdto = AutoUserMapper.MAPPER.mapTouserdto(saved_user);  // 4th method
         return userdto;
     }
 
@@ -56,14 +60,16 @@ public class UserServiceImpl implements UserService {
          Optional<User> Optional_user  = userRepo.findById(id);
          User user = Optional_user.get();
 //        return UserMapper.UsertoUserdto(user);
-        return modelMapper.map(user, Userdto.class);
+//        return modelMapper.map(user, Userdto.class);
+        return AutoUserMapper.MAPPER.mapTouserdto(Optional_user.get());
     }
 
     @Override
     public List<Userdto> GetAllUser() {
          List<User> users = userRepo.findAll();
-//        return user.stream().map(UserMapper::UsertoUserdto).collect(Collectors.toList()) ;
-        return users.stream().map((user) -> modelMapper.map(user, Userdto.class)).collect(Collectors.toList()) ;
+//        return user.stream().map(UserMapper::UsertoUserdto).collect(Collectors.toList()) ; 2nd method
+//        return users.stream().map((user) -> modelMapper.map(user, Userdto.class)).collect(Collectors.toList(); 3rd method
+        return users.stream().map((user) ->AutoUserMapper.MAPPER.mapTouserdto(user)).collect(Collectors.toList()) ; //4th method
     }
 
     @Override
@@ -73,8 +79,9 @@ public class UserServiceImpl implements UserService {
          existing_user.setLastname(user.getLastname());
          existing_user.setEmail(user.getEmail());
          User saved = userRepo.save(existing_user);
-//        return UserMapper.UsertoUserdto(saved);
-        return modelMapper.map(saved, Userdto.class);
+//        return UserMapper.UsertoUserdto(saved); 2nd method
+//        return modelMapper.map(saved, Userdto.class); 3rd method
+        return AutoUserMapper.MAPPER.mapTouserdto(saved); //4th method
     }
 
     @Override
