@@ -1,15 +1,17 @@
 package com.floppy.SpringbootRestfulwebservicesdemo.controller;
 
 import com.floppy.SpringbootRestfulwebservicesdemo.dto.Userdto;
-import com.floppy.SpringbootRestfulwebservicesdemo.entity.User;
+import com.floppy.SpringbootRestfulwebservicesdemo.exception.ErrorDetails;
+import com.floppy.SpringbootRestfulwebservicesdemo.exception.ResourceNotFoundException;
 import com.floppy.SpringbootRestfulwebservicesdemo.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/users")
@@ -57,4 +59,18 @@ public class UserController {
         userService.Delete_User(id);
         return new ResponseEntity<>("Deleted Successfully",HttpStatus.OK);
     }
+
+    //Specific Exception
+//    @ExceptionHandler(ResourceNotFoundException.class)
+//    public ResponseEntity<ErrorDetails> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException,
+//                                                                        WebRequest webRequest)
+//    {
+//        ErrorDetails errorDetails = new ErrorDetails(
+//                LocalDateTime.now(),
+//                resourceNotFoundException.getMessage(),
+//                webRequest.getDescription(false),
+//                "USER_NOT_FOUND"
+//        );
+//        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+//    }
 }
