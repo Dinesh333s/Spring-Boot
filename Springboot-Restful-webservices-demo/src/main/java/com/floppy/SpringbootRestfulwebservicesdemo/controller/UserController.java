@@ -4,6 +4,7 @@ import com.floppy.SpringbootRestfulwebservicesdemo.dto.Userdto;
 import com.floppy.SpringbootRestfulwebservicesdemo.exception.ErrorDetails;
 import com.floppy.SpringbootRestfulwebservicesdemo.exception.ResourceNotFoundException;
 import com.floppy.SpringbootRestfulwebservicesdemo.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class UserController {
 
     //Create new user
     @PostMapping("create")
-    private ResponseEntity<Userdto> CreateUser(@RequestBody Userdto user)
+    private ResponseEntity<Userdto> CreateUser(@RequestBody @Valid Userdto user)
     {
         Userdto user1 = userService.CreateUser(user);
 
@@ -47,7 +48,7 @@ public class UserController {
 
     //Update User
     @PutMapping("{id}/update")
-    private ResponseEntity<Userdto> UpdateUser(@PathVariable Long id, @RequestBody Userdto user)
+    private ResponseEntity<Userdto> UpdateUser(@PathVariable Long id,@RequestBody @Valid Userdto user)
     {
         user.setId(id);
         return new ResponseEntity<>(userService.UpdateUser(user),HttpStatus.OK);
